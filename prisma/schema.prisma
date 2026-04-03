@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// SQLite does not support native enums.
+// Role values: VIEWER | ANALYST | ADMIN
+// TransactionType values: INCOME | EXPENSE
+// Enforced at the application layer via Zod validation.
+
+model User {
+  id             Int      @id @default(autoincrement())
+  email          String   @unique
+  username       String   @unique
+  hashedPassword String
+  role           String   @default("VIEWER")
+  isActive       Boolean  @default(true)
+  isDeleted      Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  transactions Transaction[]
+}
+
+model Transaction {
+  id        Int      @id @default(autoincrement())
+  ownerId   Int
+  amount    Decimal
+  type      String
+  category  String
+  date      DateTime
+  notes     String?
+  isDeleted Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  owner User @relation(fields: [ownerId], references: [id])
+
+  @@index([date, type])
+  @@index([ownerId, date])
+}
