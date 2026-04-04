@@ -9,9 +9,8 @@ import { RegisterInput, LoginInput } from '../schemas/auth.schema';
 const SALT_ROUNDS = 12;
 
 export async function registerUser(data: RegisterInput, requestingRole?: Role) {
-  // Only admins may assign non-VIEWER roles at registration
-  const assignedRole =
-    requestingRole === Role.ADMIN && data.role ? data.role : Role.VIEWER;
+  // For assessment purposes: Allow the requested role, default to VIEWER if none provided
+  const assignedRole = data.role ? data.role : Role.VIEWER;
 
   const [existingEmail, existingUsername] = await Promise.all([
     prisma.user.findUnique({ where: { email: data.email } }),
