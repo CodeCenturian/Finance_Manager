@@ -1,4 +1,3 @@
-import { Prisma } from '@prisma/client';
 import { Role } from '../types';
 import { Decimal } from '@prisma/client/runtime/library';
 import prisma from '../prismaClient';
@@ -42,7 +41,7 @@ export async function createTransaction(data: TransactionCreateInput, ownerId: n
 }
 
 export async function listTransactions(filters: TransactionFilterInput, userId: number, role: Role) {
-  const where: Prisma.TransactionWhereInput = {
+  const where: any = {
     isDeleted: false,
     ...(role !== Role.ADMIN ? { ownerId: userId } : {}),
     ...(filters.type ? { type: filters.type } : {}),
@@ -57,7 +56,7 @@ export async function listTransactions(filters: TransactionFilterInput, userId: 
       : {}),
   };
 
-  const orderBy: Prisma.TransactionOrderByWithRelationInput = {
+  const orderBy: any = {
     [filters.sortBy]: filters.sortOrder,
   };
 
@@ -107,7 +106,7 @@ export async function updateTransaction(
   });
   if (!transaction) throw new AppError(404, 'Transaction not found');
 
-  const updateData: Prisma.TransactionUpdateInput = {};
+  const updateData: any = {};
   if (data.amount !== undefined) updateData.amount = new Decimal(data.amount);
   if (data.type !== undefined) updateData.type = data.type;
   if (data.category !== undefined) updateData.category = data.category;

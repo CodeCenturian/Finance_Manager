@@ -58,11 +58,11 @@ export async function getCategoryBreakdown(filters: DashboardFilterInput) {
 
   // Compute grand total for percentage calculation
   const grandTotal = rows.reduce(
-    (sum, row) => sum.plus(row._sum.amount ?? new Decimal(0)),
+    (sum: any, row: any) => sum.plus(row._sum.amount ?? new Decimal(0)),
     new Decimal(0),
   );
 
-  const categories = rows.map((row) => {
+  const categories = rows.map((row: any) => {
     const total = row._sum.amount ?? new Decimal(0);
     const percentage = grandTotal.isZero()
       ? 0
@@ -153,7 +153,7 @@ export async function getRecentTransactions(limit: number) {
   });
 
   return {
-    transactions: transactions.map((t) => ({
+    transactions: transactions.map((t: any) => ({
       ...t,
       amount: t.amount.toFixed(2),
     })),
