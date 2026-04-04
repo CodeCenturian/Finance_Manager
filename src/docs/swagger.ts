@@ -14,6 +14,10 @@ const options: swaggerJsdoc.Options = {
     },
     servers: [
       {
+        url: 'https://finance-manager-n5ok.onrender.com',
+        description: 'Production server',
+      },
+      {
         url: 'http://localhost:3000',
         description: 'Development server',
       },
